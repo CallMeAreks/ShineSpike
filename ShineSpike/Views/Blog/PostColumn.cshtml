@@ -1,0 +1,30 @@
+﻿@model Post
+
+<div class="col-sm-4">
+    <div class="card bg-primary">
+        @if (Model.HasCover)
+        {
+            <div class="card-header">
+            <img src="@Model.Cover" class="post-column-img" alt="Post cover" />
+            </div>
+        }
+        
+        <div class="card-body">
+            <a href="@Model.Link"><h4 class="card-title">@Model.Title</h4></a>
+            <p class="card-text">
+                @Html.Raw(Model.Excerpt)
+            </p>
+        </div>
+        <div class="card-footer">
+            @if (Model.Categories.Any())
+            {
+                <span>Categories:</span>
+
+                @foreach (string cat in Model.Categories)
+                {
+                    <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat.ToLowerInvariant()" asp-route-page="">@cat</a>
+                }
+            }
+        </div>
+    </div>
+</div>

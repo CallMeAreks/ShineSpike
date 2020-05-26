@@ -1,0 +1,40 @@
+﻿@model Post
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<main role="main" class="container">
+    <div class="row ">
+        <div class="col-sm-8 offset-md-2">
+            <div class="card bg-primary post">
+                <div class="card-header">@Model.PublishedAt.ToShortDateString()</div>
+                <div class="card-body post-body">
+                    <h2 class="card-title">@Model.Title</h2>
+                    @if (Model.HasCover)
+                    {
+                        <img src="@Model.Cover" class="img-fluid rounded mx-auto d-block" alt="Post cover" />
+                    }
+
+                    @Html.Raw(Model.GetHtmlContent())
+                </div>
+                <div class="card-footer">
+
+                    @if (Model.Categories.Any())
+                    {
+                        <span>Categories:</span>
+
+                        @foreach (string cat in Model.Categories)
+                        {
+                            <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat.ToLowerInvariant()" asp-route-page="">@cat</a>
+                        }
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Publisher" asp-action="Editor" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit Post</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main><!-- /.container -->

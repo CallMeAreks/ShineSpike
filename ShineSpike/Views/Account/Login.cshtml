@@ -1,0 +1,32 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-4 offset-4">
+            <form method="post" id="login" aria-labelledby="legend" asp-route-returnUrl="@ViewData[Constants.ReturnUrl]">
+                <div asp-validation-summary="All"></div>
+                <fieldset>
+                    <legend id="legend">Sign in</legend>
+
+                    <input class="form-control" asp-for="UserName" aria-label="Username" autofocus required placeholder="Username" />
+                    <input class="form-control" asp-for="Password" aria-label="Password" required placeholder="Password" />
+
+                    <fieldset class="form-group">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input asp-for="RememberMe" class="form-check-input">
+                                <small>Remember me</small>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <input type="submit" class="btn btn-info" value="Sign in" />
+                </fieldset>
+
+            </form>
+        </div>
+    </div>
+</main>

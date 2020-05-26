@@ -1,0 +1,39 @@
+﻿.post-column-img {
+    width: 100%;
+    height: 10rem;
+    object-fit: cover;
+}
+
+.post-columns .card-text {
+    font-size: 0.95rem;
+}
+
+.post-columns {
+    margin-top: 3rem;
+}
+
+.post-columns .card-text {
+    font-size: 0.95rem;
+}
+
+.post .card-header, .post .card-footer {
+    font-size: 69%;
+}
+
+.post .card-footer {
+    font-size: 75%;
+}
+
+.post .card-title, .post img {
+    margin-bottom: 2.25rem;
+}
+
+.post .card-header, .post .card-body {
+    padding-top: 0.20rem;
+    padding-bottom: 0.20rem;
+}
+
+.post-body img {
+    max-width: 100%;
+    height: auto
+}

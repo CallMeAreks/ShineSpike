@@ -1,0 +1,47 @@
+﻿@inject IOptionsSnapshot<SiteSettings> settings
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @settings.Value.Name</title>
+    <link rel="stylesheet" href="~/css/lux.min.css" />
+    <link rel="stylesheet" href="~/css/layout.css" />
+    @RenderSection("Head", required: false)
+
+    <style>
+    </style>
+</head>
+<body class="bg-primary">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <a class="navbar-brand" href="~/">@settings.Value.Name</a>
+        <a class="nav-link" href="~/blog">Blog <span class="sr-only">(current)</span></a>
+    </nav>
+
+    @RenderBody()
+
+    <footer class="text-muted">
+        <div class="container">
+            <p class="float-right">
+                <a href="#">Back to top</a>
+            </p>
+            <p>
+                Running <a href="https://github.com/CallMeAreks/ShineSpike">ShineSpike</a>. Built by <a href="https://areks.io.com/">areks.io</a>.
+            </p>
+
+            <p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Publisher" asp-action="Editor" rel="nofollow">New Post</a>
+                    <span> | </span>
+                    <a asp-controller="account" asp-action="Logout" rel="nofollow">Sign out</a>
+                }
+                else
+                {
+                    <a asp-controller="account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path" rel="nofollow" title="Sign In">Sign In</a>
+                }
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

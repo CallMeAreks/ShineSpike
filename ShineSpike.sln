@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShineSpike", "ShineSpike\ShineSpike.csproj", "{46DF84AC-078C-4F9A-B530-A51BF5EC2FBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46DF84AC-078C-4F9A-B530-A51BF5EC2FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46DF84AC-078C-4F9A-B530-A51BF5EC2FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46DF84AC-078C-4F9A-B530-A51BF5EC2FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46DF84AC-078C-4F9A-B530-A51BF5EC2FBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {30825B34-2057-4E68-9917-174A1FFA701C}
+	EndGlobalSection
+EndGlobal

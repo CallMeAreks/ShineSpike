@@ -1,0 +1,52 @@
+﻿@model Post
+@{
+    ViewData["Title"] = "Editor";
+}
+@section Head
+{
+    <link rel="stylesheet" href="~/css/editor.css" />
+}
+
+<main role="main" class="container-fluid">
+    <form method="post" id="edit" asp-controller="Publisher" asp-action="PublishPost">
+        <input type="hidden" asp-for="@Model.Id" />
+        <div class="form-row align-items-center">
+            <div class="col-sm-3">
+                <label asp-for="@Model.Title">Title</label>
+                <input asp-for="@Model.Title" class="form-control-plaintext" required placeholder="Title of blog post">
+            </div>
+            <div class="col-sm-4">
+                <label asp-for="@Model.Excerpt" class="label">Excerpt</label>
+                <input asp-for="@Model.Excerpt" class="form-control-plaintext" placeholder="Short description of the post" />
+            </div>
+            <div class="col-sm-2">
+                <label asp-for="@Model.Permalink" class="label">Permalink</label>
+                <input asp-for="@Model.Permalink" class="form-control-plaintext" placeholder="Insert a permalink or leave blank to autogenerate one" />
+            </div>
+            <div class="col-sm-2">
+                <label asp-for="@Model.Cover" class="label">Cover image</label>
+                <input asp-for="@Model.Cover" class="form-control-plaintext" placeholder="https://yourdomain/image.png" value="@Model.Cover" />
+            </div>
+        </div>
+        <div class="editormd" id="editormd" style="margin-top:0.5rem">
+            <textarea asp-for="@Model.Content" required>@Model.Content</textarea>
+        </div>
+        <div id="post-actions" class="row">
+            <div class="col-auto">
+                <input type="submit" value="Save" class="btn btn-info" />
+
+                @if (!string.IsNullOrEmpty(Model.Title))
+                {
+                    <input id="delete-post" type="submit" value="Delete" class="btn btn-danger" asp-controller="Publisher" asp-action="DeletePost" asp-route-id="@Model.Id" />
+                }
+            </div>
+        </div>
+    </form>
+</main><!-- /.container -->
+
+<link rel="stylesheet" href="~/css/editormd.min.css" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/editormd.min.js"></script>
+<script src="~/js/editormd_en.js"></script>
+<script src="~/js/editormd_init.js"></script>
+<script src="~/js/site.js"></script>
