@@ -12,7 +12,7 @@
                     <h2 class="card-title">@Model.Title</h2>
                     @if (Model.HasCover)
                     {
-                        <img src="@Model.Cover" class="img-fluid rounded mx-auto d-block" alt="Post cover" />
+                        <img src="@Model.Cover" class="img-fluid rounded mx-auto d-block post-cover" alt="Post cover" />
                     }
 
                     @Html.Raw(Model.GetHtmlContent())
