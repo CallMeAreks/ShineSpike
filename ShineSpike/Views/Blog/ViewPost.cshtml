@@ -10,12 +10,8 @@
                 <div class="card-header">@Model.PublishedAt.ToShortDateString()</div>
                 <div class="card-body post-body">
                     <h2 class="card-title">@Model.Title</h2>
-                    @if (Model.HasCover)
-                    {
-                        <img src="@Model.Cover" class="img-fluid rounded mx-auto d-block post-cover" alt="Post cover" />
-                    }
 
-                    @Html.Raw(Model.GetHtmlContent())
+                    @Html.Raw(Model.HtmlContent)
                 </div>
                 <div class="card-footer">
 
@@ -38,3 +34,8 @@
         </div>
     </div>
 </main><!-- /.container -->
+
+
+@{
+    await Html.RenderPartialAsync("../Shared/Footer.cshtml");
+}

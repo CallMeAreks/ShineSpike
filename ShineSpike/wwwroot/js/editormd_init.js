@@ -22,6 +22,7 @@ $(function () {
         tocm: true,
         tex: true,
         imageUpload: true,
+        imageUploadURL: "/Upload/Image",
         //previewCodeHighlight : false,
         flowChart: true,
         sequenceDiagram: true,

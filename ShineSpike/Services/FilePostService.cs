@@ -13,9 +13,9 @@ namespace ShineSpike.Services
 {
     public class FilePostService : IPostService
     {
-        private const string PostsFolderName = "posts";
         private const string Extension = ".json";
-        private string PostFolder;
+        private string PostsFolder;
+        private string ImagesFolder;
         private readonly IHttpContextAccessor ContextAccessor;
         private readonly List<Post> Cache = new List<Post>();
 
@@ -28,7 +28,9 @@ namespace ShineSpike.Services
                 throw new ArgumentNullException(nameof(env));
             }
 
-            PostFolder = Path.Combine(env.WebRootPath, PostsFolderName);
+            PostsFolder = Path.Combine(env.WebRootPath, Constants.PostsFolderPath);
+            ImagesFolder = Path.Combine(env.WebRootPath, Constants.ImagesFolderPath);
+
             ContextAccessor = contextAccessor;
             
             Initialize();
@@ -68,6 +70,7 @@ namespace ShineSpike.Services
             
             post.LastModified = DateTime.UtcNow;
             post.Permalink = string.IsNullOrEmpty(post.Permalink) ? StringUtils.CreatePermalink(post) : post.Permalink;
+            post.ParseContent();
 
             var filePath = GetPostFilePath(post);
             var json = JsonSerializer.Serialize(post);
@@ -106,15 +109,17 @@ namespace ShineSpike.Services
 
         protected void Initialize()
         {
-            // Ensure post folder is created
-            Directory.CreateDirectory(PostFolder);
+            // Ensure posts and images folders are created
+            Directory.CreateDirectory(PostsFolder);
+            Directory.CreateDirectory(ImagesFolder);
+
             LoadCache();
             SortPostsByPublishedDate();
         }
 
         protected void LoadCache()
         {
-            foreach (var file in Directory.EnumerateFiles(PostFolder, $"*{Extension}", SearchOption.TopDirectoryOnly))
+            foreach (var file in Directory.EnumerateFiles(PostsFolder, $"*{Extension}", SearchOption.TopDirectoryOnly))
             {
                 var content = File.ReadAllText(file);
                 var post = JsonSerializer.Deserialize<Post>(content);
@@ -134,6 +139,6 @@ namespace ShineSpike.Services
             );
         }
 
-        protected string GetPostFilePath(Post post) => Path.Combine(PostFolder, $"{post.Id}{Extension}");
+        protected string GetPostFilePath(Post post) => Path.Combine(PostsFolder, $"{post.Id}{Extension}");
     }
 }

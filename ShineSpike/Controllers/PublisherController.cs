@@ -37,7 +37,7 @@ namespace ShineSpike.Controllers
             {
                 throw new ArgumentNullException(nameof(post));
             }
-
+            
             await Service.Publish(post);
             return RedirectToAction("ViewPost", "Blog", new { post.Permalink });
         }

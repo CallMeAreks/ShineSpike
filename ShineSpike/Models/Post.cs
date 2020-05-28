@@ -1,4 +1,6 @@
-﻿using ShineSpike.Utils;
+﻿using Markdig;
+using ShineSpike.Extensions;
+using ShineSpike.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,8 +10,6 @@ namespace ShineSpike.Models
 {
     public class Post
     {
-        private string htmlContent = string.Empty;
-
         [Required]
         public string Id { get; set; } = DateTime.UtcNow.ToString("yyyyMMddHmmss");
         public string Permalink { get; set; } = string.Empty;
@@ -21,28 +21,30 @@ namespace ShineSpike.Models
         [Required]
         public string Content { get; set; } = string.Empty;
 
-        public string Cover { get; set; } = string.Empty;
+        public string Cover { get; set; }
 
-        [Required]
-        public string Excerpt { get; set; } = string.Empty;
+        public string Excerpt { get; set; }
         public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
         public bool IsPublished { get; set; } = true;
         public DateTime LastModified { get; internal set; } = DateTime.UtcNow;
         
         [NotMapped]
-        public string Link => $"/blog/{Permalink}";
+        public string Link => $"/{Constants.BlogControllerAction}/{Permalink}";
 
         [NotMapped]
         public bool HasCover => !string.IsNullOrEmpty(Cover);
 
-        public string GetHtmlContent()
-        {
-            if (string.IsNullOrWhiteSpace(htmlContent))
-            {
-                htmlContent = HtmlUtils.MarkdownToHtml(Content);
-            }
+        [NotMapped]
+        public string HtmlContent { get; set; }
 
-            return htmlContent;
+        public void ParseContent()
+        {
+            var pipeline = new MarkdownPipelineBuilder().Use<LazyImagesExtension>().Build();
+            var doc = Markdown.Parse(Content, pipeline);
+
+            Cover = doc.GetFirstImgUrl();
+            Excerpt = Excerpt ?? doc.ExtractExcerpt();
+            HtmlContent = doc.ToHtml(pipeline);
         }
     }
 }

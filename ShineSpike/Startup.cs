@@ -26,6 +26,7 @@ namespace ShineSpike
             services.AddControllersWithViews();
             services.AddSingleton<IPostService, FilePostService>();
             services.AddSingleton<ILoginService, LoginService>();
+            services.AddScoped<IFormFileUploadService, FormFileUploadService>();
             services.Configure<SiteSettings>(Configuration.GetSection("site"));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
