@@ -20,28 +20,5 @@
 
     @RenderBody()
 
-    <footer class="text-muted">
-        <div class="container">
-            <p class="float-right">
-                <a href="#">Back to top</a>
-            </p>
-            <p>
-                Running <a href="https://github.com/CallMeAreks/ShineSpike">ShineSpike</a>. Built by <a href="https://areks.io.com/">areks.io</a>.
-            </p>
-
-            <p>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <a asp-controller="Publisher" asp-action="Editor" rel="nofollow">New Post</a>
-                    <span> | </span>
-                    <a asp-controller="account" asp-action="Logout" rel="nofollow">Sign out</a>
-                }
-                else
-                {
-                    <a asp-controller="account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path" rel="nofollow" title="Sign In">Sign In</a>
-                }
-            </p>
-        </div>
-    </footer>
 </body>
 </html>
