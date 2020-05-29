@@ -40,7 +40,7 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public void Associate(TSecondaryKey subKey, TPrimaryKey primaryKey)
+		private void Associate(TSecondaryKey subKey, TPrimaryKey primaryKey)
 		{
 			readerWriterLock.EnterUpgradeableReadLock();
 
@@ -48,21 +48,6 @@ namespace ShineSpike.Utils
 			{
 				if (!baseDictionary.ContainsKey(primaryKey))
 					throw new KeyNotFoundException(string.Format("The base dictionary does not contain the key '{0}'", primaryKey));
-
-				if (primaryToSubkeyMapping.ContainsKey(primaryKey)) // Remove the old mapping first
-				{
-					readerWriterLock.EnterWriteLock();
-
-					try
-					{
-						subDictionary.Remove(primaryToSubkeyMapping[primaryKey]);
-						primaryToSubkeyMapping.Remove(primaryKey);
-					}
-					finally
-					{
-						readerWriterLock.ExitWriteLock();
-					}
-				}
 
 				subDictionary[subKey] = primaryKey;
 				primaryToSubkeyMapping[primaryKey] = subKey;
@@ -165,24 +150,6 @@ namespace ShineSpike.Utils
 			Associate(subKey, primaryKey);
 		}
 
-		public TValue[] CloneValues()
-		{
-			readerWriterLock.EnterReadLock();
-
-			try
-			{
-				TValue[] values = new TValue[baseDictionary.Values.Count];
-
-				baseDictionary.Values.CopyTo(values, 0);
-
-				return values;
-			}
-			finally
-			{
-				readerWriterLock.ExitReadLock();
-			}
-		}
-
 		public List<TValue> Values
 		{
 			get
@@ -197,42 +164,6 @@ namespace ShineSpike.Utils
 				{
 					readerWriterLock.ExitReadLock();
 				}
-			}
-		}
-
-		public TPrimaryKey[] ClonePrimaryKeys()
-		{
-			readerWriterLock.EnterReadLock();
-
-			try
-			{
-				TPrimaryKey[] values = new TPrimaryKey[baseDictionary.Keys.Count];
-
-				baseDictionary.Keys.CopyTo(values, 0);
-
-				return values;
-			}
-			finally
-			{
-				readerWriterLock.ExitReadLock();
-			}
-		}
-
-		public TSecondaryKey[] CloneSubKeys()
-		{
-			readerWriterLock.EnterReadLock();
-
-			try
-			{
-				TSecondaryKey[] values = new TSecondaryKey[subDictionary.Keys.Count];
-
-				subDictionary.Keys.CopyTo(values, 0);
-
-				return values;
-			}
-			finally
-			{
-				readerWriterLock.ExitReadLock();
 			}
 		}
 
