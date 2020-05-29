@@ -10,7 +10,7 @@ namespace ShineSpike.Utils
 	/// <typeparam name="K">Primary Key Type</typeparam>
 	/// <typeparam name="L">Sub Key Type</typeparam>
 	/// <typeparam name="V">Value Type</typeparam>
-	public class MultiKeyDictionary<K, L, V>
+	public class DualKeyDictionary<K, L, V>
 	{
 		internal readonly Dictionary<K, V> baseDictionary = new Dictionary<K, V>();
 		internal readonly Dictionary<L, K> subDictionary = new Dictionary<L, K>();
@@ -108,15 +108,9 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public bool ContainsKey(L subKey)
-		{
-			return TryGetValue(subKey, out V _);
-		}
+		public bool ContainsKey(L subKey) => TryGetValue(subKey, out V _);
 
-		public bool ContainsKey(K primaryKey)
-		{
-			return TryGetValue(primaryKey, out V _);
-		}
+		public bool ContainsKey(K primaryKey) => TryGetValue(primaryKey, out V _);
 
 		public void Remove(K primaryKey)
 		{
@@ -124,15 +118,8 @@ namespace ShineSpike.Utils
 
 			try
 			{
-				if (primaryToSubkeyMapping.ContainsKey(primaryKey))
-				{
-					if (subDictionary.ContainsKey(primaryToSubkeyMapping[primaryKey]))
-					{
-						subDictionary.Remove(primaryToSubkeyMapping[primaryKey]);
-					}
-
-					primaryToSubkeyMapping.Remove(primaryKey);
-				}
+				subDictionary.Remove(primaryToSubkeyMapping[primaryKey]);
+				primaryToSubkeyMapping.Remove(primaryKey);
 
 				baseDictionary.Remove(primaryKey);
 			}
@@ -149,9 +136,7 @@ namespace ShineSpike.Utils
 			try
 			{
 				baseDictionary.Remove(subDictionary[subKey]);
-
 				primaryToSubkeyMapping.Remove(subDictionary[subKey]);
-
 				subDictionary.Remove(subKey);
 			}
 			finally
@@ -258,9 +243,7 @@ namespace ShineSpike.Utils
 			try
 			{
 				baseDictionary.Clear();
-
 				subDictionary.Clear();
-
 				primaryToSubkeyMapping.Clear();
 			}
 			finally
