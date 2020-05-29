@@ -7,40 +7,40 @@ namespace ShineSpike.Utils
 	/// <summary>
 	/// Multi-Key Dictionary Class
 	/// </summary>	
-	/// <typeparam name="K">Primary Key Type</typeparam>
-	/// <typeparam name="L">Sub Key Type</typeparam>
-	/// <typeparam name="V">Value Type</typeparam>
-	public class DualKeyDictionary<K, L, V>
+	/// <typeparam name="TPrimaryKey">Primary Key Type</typeparam>
+	/// <typeparam name="TSecondaryKey">Sub Key Type</typeparam>
+	/// <typeparam name="TValue">Value Type</typeparam>
+	public class DualKeyDictionary<TPrimaryKey, TSecondaryKey, TValue>
 	{
-		internal readonly Dictionary<K, V> baseDictionary = new Dictionary<K, V>();
-		internal readonly Dictionary<L, K> subDictionary = new Dictionary<L, K>();
-		internal readonly Dictionary<K, L> primaryToSubkeyMapping = new Dictionary<K, L>();
+		internal readonly Dictionary<TPrimaryKey, TValue> baseDictionary = new Dictionary<TPrimaryKey, TValue>();
+		internal readonly Dictionary<TSecondaryKey, TPrimaryKey> subDictionary = new Dictionary<TSecondaryKey, TPrimaryKey>();
+		internal readonly Dictionary<TPrimaryKey, TSecondaryKey> primaryToSubkeyMapping = new Dictionary<TPrimaryKey, TSecondaryKey>();
 
 		ReaderWriterLockSlim readerWriterLock = new ReaderWriterLockSlim();
 
-		public V this[L subKey]
+		public TValue this[TSecondaryKey subKey]
 		{
 			get
 			{
-				if (TryGetValue(subKey, out V item))
+				if (TryGetValue(subKey, out TValue item))
 					return item;
 
 				throw new KeyNotFoundException("sub key not found: " + subKey.ToString());
 			}
 		}
 
-		public V this[K primaryKey]
+		public TValue this[TPrimaryKey primaryKey]
 		{
 			get
 			{
-				if (TryGetValue(primaryKey, out V item))
+				if (TryGetValue(primaryKey, out TValue item))
 					return item;
 
 				throw new KeyNotFoundException("primary key not found: " + primaryKey.ToString());
 			}
 		}
 
-		public void Associate(L subKey, K primaryKey)
+		public void Associate(TSecondaryKey subKey, TPrimaryKey primaryKey)
 		{
 			readerWriterLock.EnterUpgradeableReadLock();
 
@@ -73,7 +73,7 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public bool TryGetValue(L subKey, out V val)
+		public bool TryGetValue(TSecondaryKey subKey, out TValue val)
 		{
 			val = default;
 
@@ -81,7 +81,7 @@ namespace ShineSpike.Utils
 
 			try
 			{
-				if (subDictionary.TryGetValue(subKey, out K primaryKey))
+				if (subDictionary.TryGetValue(subKey, out TPrimaryKey primaryKey))
 				{
 					return baseDictionary.TryGetValue(primaryKey, out val);
 				}
@@ -94,7 +94,7 @@ namespace ShineSpike.Utils
 			return false;
 		}
 
-		public bool TryGetValue(K primaryKey, out V val)
+		public bool TryGetValue(TPrimaryKey primaryKey, out TValue val)
 		{
 			readerWriterLock.EnterReadLock();
 
@@ -108,11 +108,11 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public bool ContainsKey(L subKey) => TryGetValue(subKey, out V _);
+		public bool ContainsKey(TSecondaryKey subKey) => TryGetValue(subKey, out TValue _);
 
-		public bool ContainsKey(K primaryKey) => TryGetValue(primaryKey, out V _);
+		public bool ContainsKey(TPrimaryKey primaryKey) => TryGetValue(primaryKey, out TValue _);
 
-		public void Remove(K primaryKey)
+		public void Remove(TPrimaryKey primaryKey)
 		{
 			readerWriterLock.EnterWriteLock();
 
@@ -129,7 +129,7 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public void Remove(L subKey)
+		public void Remove(TSecondaryKey subKey)
 		{
 			readerWriterLock.EnterWriteLock();
 
@@ -145,7 +145,7 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public void Add(K primaryKey, V val)
+		public void Add(TPrimaryKey primaryKey, TValue val)
 		{
 			readerWriterLock.EnterWriteLock();
 
@@ -159,19 +159,19 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public void Add(K primaryKey, L subKey, V val)
+		public void Add(TPrimaryKey primaryKey, TSecondaryKey subKey, TValue val)
 		{
 			Add(primaryKey, val);
 			Associate(subKey, primaryKey);
 		}
 
-		public V[] CloneValues()
+		public TValue[] CloneValues()
 		{
 			readerWriterLock.EnterReadLock();
 
 			try
 			{
-				V[] values = new V[baseDictionary.Values.Count];
+				TValue[] values = new TValue[baseDictionary.Values.Count];
 
 				baseDictionary.Values.CopyTo(values, 0);
 
@@ -183,7 +183,7 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public List<V> Values
+		public List<TValue> Values
 		{
 			get
 			{
@@ -200,13 +200,13 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public K[] ClonePrimaryKeys()
+		public TPrimaryKey[] ClonePrimaryKeys()
 		{
 			readerWriterLock.EnterReadLock();
 
 			try
 			{
-				K[] values = new K[baseDictionary.Keys.Count];
+				TPrimaryKey[] values = new TPrimaryKey[baseDictionary.Keys.Count];
 
 				baseDictionary.Keys.CopyTo(values, 0);
 
@@ -218,13 +218,13 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public L[] CloneSubKeys()
+		public TSecondaryKey[] CloneSubKeys()
 		{
 			readerWriterLock.EnterReadLock();
 
 			try
 			{
-				L[] values = new L[subDictionary.Keys.Count];
+				TSecondaryKey[] values = new TSecondaryKey[subDictionary.Keys.Count];
 
 				subDictionary.Keys.CopyTo(values, 0);
 
@@ -269,7 +269,7 @@ namespace ShineSpike.Utils
 			}
 		}
 
-		public IEnumerator<KeyValuePair<K, V>> GetEnumerator()
+		public IEnumerator<KeyValuePair<TPrimaryKey, TValue>> GetEnumerator()
 		{
 			readerWriterLock.EnterReadLock();
 

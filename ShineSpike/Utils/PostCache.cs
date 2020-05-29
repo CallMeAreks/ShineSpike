@@ -5,7 +5,7 @@ namespace ShineSpike.Utils
 {
     public class PostCache
     {
-        private MultiKeyDictionary<long, string, Post> Dict = new MultiKeyDictionary<long, string, Post>();
+        private DualKeyDictionary<long, string, Post> Dict = new DualKeyDictionary<long, string, Post>();
         private List<long> Index = new List<long>();
 
         public IEnumerable<Post> Posts
