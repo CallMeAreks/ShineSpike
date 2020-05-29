@@ -8,6 +8,7 @@
         public const string ReturnUrl = "ReturnUrl";
         public const string BlogControllerAction = "blog";
         public const int ExcerptLength = 150;
+        public const int PostsPerPage = 12;
 
         public const string PostsFolderPath = "blog/posts";
         public const string ImagesFolderPath = "blog/images";

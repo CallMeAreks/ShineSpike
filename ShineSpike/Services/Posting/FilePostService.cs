@@ -54,7 +54,7 @@ namespace ShineSpike.Services
 
         public IEnumerable<Post> GetPublishedPosts(Func<Post, bool> condition = null)
         {
-            if(condition == null)
+            if (condition == null)
             {
                 return Cache.Posts.Where(IsPublished);
             }
