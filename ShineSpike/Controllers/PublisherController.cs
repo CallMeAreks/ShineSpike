@@ -18,14 +18,14 @@ namespace ShineSpike.Controllers
 
         [Route("blog/editor/{id?}")]
         [Authorize]
-        public async Task<IActionResult> Editor(string id)
+        public async Task<IActionResult> Editor(long? id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null)
             {
                 return View(new Post());
             }
 
-            var post = await Service.GetById(id);
+            var post = await Service.GetById(id.Value);
             return post == null ? (IActionResult)NotFound() : View(post);
         }
 
@@ -44,7 +44,7 @@ namespace ShineSpike.Controllers
 
         [Route("blog/{id}/delete")]
         [HttpPost, Authorize, AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> DeletePost(string id)
+        public async Task<IActionResult> DeletePost(long id)
         {
             var post = await Service.GetById(id);
 

@@ -7,7 +7,7 @@ namespace ShineSpike.Services
 {
     public interface IPostService
     {
-        Task<Post> GetById(string id);
+        Task<Post> GetById(long id);
         Task<Post> GetByPermalink(string permalink);
         IEnumerable<Post> GetPublishedPosts(Func<Post, bool> condition = null);
         IEnumerable<Post> GetPostsByCategory(string category);

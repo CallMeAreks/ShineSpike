@@ -11,7 +11,7 @@ namespace ShineSpike.Models
     public class Post
     {
         [Required]
-        public string Id { get; set; } = DateTime.UtcNow.ToString("yyyyMMddHmmss");
+        public long Id { get; set; } = long.Parse(DateTime.UtcNow.ToString("yyyyMMddHmmss"));
         public string Permalink { get; set; } = string.Empty;
 
         public IList<string> Categories { get; } = new List<string>();

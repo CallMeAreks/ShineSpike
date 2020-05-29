@@ -43,7 +43,7 @@ namespace ShineSpike.Services
 
                 return new FormUploadResponse($"/{Constants.ImagesFolderPath}/{uniqueFileName}");
             }
-            catch(Exception _)
+            catch
             {
                 return new FormUploadResponse(false, null);
             }
