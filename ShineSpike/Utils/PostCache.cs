@@ -1,11 +1,13 @@
 ﻿using ShineSpike.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShineSpike.Utils
 {
     public class PostCache
     {
-        private DualKeyDictionary<long, string, Post> Dict = new DualKeyDictionary<long, string, Post>();
+        private DualKeyDictionary<long, string, Post> PostDict = new DualKeyDictionary<long, string, Post>();
+        private HashSet<string> CategoryHashSet = new HashSet<string>();
         private List<long> Index = new List<long>();
 
         public IEnumerable<Post> Posts
@@ -19,6 +21,8 @@ namespace ShineSpike.Utils
                 }
             }
         }
+
+        public IEnumerable<string> Categories => CategoryHashSet.ToList();
 
         /// <summary>
         /// Adds the item to the cache and sorts the collection in descending order
@@ -51,7 +55,7 @@ namespace ShineSpike.Utils
         /// <returns></returns>
         public Post Get(long key)
         {
-            return Dict.TryGetValue(key, out Post post) ? post : null;
+            return PostDict.TryGetValue(key, out Post post) ? post : null;
         }
 
         /// <summary>
@@ -61,7 +65,7 @@ namespace ShineSpike.Utils
         /// <returns></returns>
         public Post Get(string key)
         {
-            return Dict.TryGetValue(key, out Post post) ? post : null;
+            return PostDict.TryGetValue(key, out Post post) ? post : null;
         }
 
         /// <summary>
@@ -80,13 +84,15 @@ namespace ShineSpike.Utils
         /// <param name="post"></param>
         private void AddOrReplace(Post post)
         {
-            if (Dict.ContainsKey(post.Id))
+            if (PostDict.ContainsKey(post.Id))
             {
                 RemoveFromCaches(post);
             }
 
-            Dict.Add(post.Id, post.Permalink, post);
+            PostDict.Add(post.Id, post.Permalink, post);
             Index.Add(post.Id);
+
+            CacheCategories(post);
         }
 
         /// <summary>
@@ -95,8 +101,16 @@ namespace ShineSpike.Utils
         /// <param name="post"></param>
         private void RemoveFromCaches(Post post)
         {
-            Dict.Remove(post.Id);
+            PostDict.Remove(post.Id);
             Index.Remove(post.Id);
+        }
+
+        private void CacheCategories(Post post)
+        {
+            foreach(var category in post.Categories)
+            {
+                CategoryHashSet.Add(category);
+            }
         }
 
         /// <summary>

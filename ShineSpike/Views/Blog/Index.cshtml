@@ -1,13 +1,10 @@
-﻿@model IEnumerable<Post>
+﻿@model PostPageViewModel
 @{
     ViewData["Title"] = "Blog";
-    int? currentPage = int.Parse(ViewContext.RouteData.Values["page"] as string ?? "0");
-    int? previousPage = currentPage + 1;
-    int? nextPage = currentPage > 1 ? currentPage - 1 : null;
 }
     <main role="main" class="container">
         <div class="row post-columns">
-            @foreach (var post in Model)
+            @foreach (var post in Model.Posts)
             {
                 await Html.RenderPartialAsync("PostColumn.cshtml", post);
             }
@@ -15,11 +12,11 @@
 
         <div class="row">
             <div class="col-md-12">
-                <a class="btn btn-primary" asp-controller="blog" asp-action="Index" asp-route-page="@previousPage">&laquo; Previous</a>
+                <a href="@Model.Page.PreviousPageUrl" class="btn btn-primary">&laquo; Previous</a>
 
-                @if (currentPage > 0)
+                @if (Model.Page.HasNextPage)
                 {
-                    <a class="btn btn-primary" style="float: right" asp-controller="blog" asp-action="Index" asp-route-page="@nextPage">&raquo; Next</a>
+                    <a href="@Model.Page.NextPageUrl" class="btn btn-primary" style="float: right">&raquo; Next</a>
                 }
 
             </div>

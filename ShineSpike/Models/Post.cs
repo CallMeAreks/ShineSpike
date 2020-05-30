@@ -4,7 +4,7 @@ using ShineSpike.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ShineSpike.Models
 {
@@ -13,8 +13,7 @@ namespace ShineSpike.Models
         [Required]
         public long Id { get; set; } = long.Parse(DateTime.UtcNow.ToString("yyyyMMddHmmss"));
         public string Permalink { get; set; } = string.Empty;
-
-        public IList<string> Categories { get; } = new List<string>();
+        public IList<string> Categories { get; set; } = new List<string>();
 
         [Required]
         public string Title { get; set; } = string.Empty;
@@ -27,15 +26,28 @@ namespace ShineSpike.Models
         public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
         public bool IsPublished { get; set; } = true;
         public DateTime LastModified { get; internal set; } = DateTime.UtcNow;
-        
-        [NotMapped]
+        public string HtmlContent { get; set; }
+
+        [JsonIgnore]
         public string Link => $"/{Constants.BlogControllerAction}/{Permalink}";
 
-        [NotMapped]
+        [JsonIgnore]
         public bool HasCover => !string.IsNullOrEmpty(Cover);
 
-        [NotMapped]
-        public string HtmlContent { get; set; }
+        [JsonIgnore]
+        public string SerializedCategories => string.Join(",", Categories);
+
+        public void LoadCategoriesFromString(string serializedCategories)
+        {
+            Categories.Clear();
+
+            var categories = serializedCategories.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var category in categories)
+            {
+                Categories.Add(category.ToLower().Trim());
+            }
+        }
 
         public void ParseContent()
         {

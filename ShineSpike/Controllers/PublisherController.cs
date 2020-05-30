@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ShineSpike.Models;
 using ShineSpike.Services;
+using ShineSpike.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShineSpike.Controllers
@@ -20,26 +22,32 @@ namespace ShineSpike.Controllers
         [Authorize]
         public async Task<IActionResult> Editor(long? id)
         {
+            var allCategories = Service.GetCategories();
+
             if (id == null)
-            {
-                return View(new Post());
-            }
+                return View(GetEditPostViewModel(allCategories));
 
             var post = await Service.GetById(id.Value);
-            return post == null ? (IActionResult)NotFound() : View(post);
+
+            if(post == null)
+                return NotFound();
+            
+            return View(GetEditPostViewModel(allCategories, post));
         }
 
         [Route("blog/editor")]
         [HttpPost, Authorize, AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> PublishPost(Post post)
+        public async Task<IActionResult> PublishPost(EditPostViewModel model)
         {
-            if (post is null)
+            if (model?.Post == null)
             {
-                throw new ArgumentNullException(nameof(post));
+                throw new ArgumentNullException(nameof(model));
             }
-            
-            await Service.Publish(post);
-            return RedirectToAction("ViewPost", "Blog", new { post.Permalink });
+
+            model.Post.LoadCategoriesFromString(Request.Form["Categories"]);
+
+            await Service.Publish(model.Post);
+            return RedirectToAction("ViewPost", "Blog", new { model.Post.Permalink });
         }
 
         [Route("blog/{id}/delete")]
@@ -55,6 +63,21 @@ namespace ShineSpike.Controllers
 
             await Service.Delete(post);
             return Redirect("/");
+        }
+
+        private EditPostViewModel GetEditPostViewModel(IEnumerable<string> categories, Post post = null)
+        {
+            var model =new EditPostViewModel
+            {
+                AllCategories = categories
+            };
+
+            if(post != null)
+            {
+                model.Post = post;
+            }
+
+            return model;
         }
     }
 }

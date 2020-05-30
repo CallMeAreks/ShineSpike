@@ -67,6 +67,11 @@ namespace ShineSpike.Services
             return GetPublishedPosts(post => post.Categories.Contains(category, StringComparer.OrdinalIgnoreCase));
         }
 
+        public IEnumerable<string> GetCategories()
+        {
+            return Cache.Categories;
+        }
+
         public async Task Publish(Post post)
         {
             if (post is null)

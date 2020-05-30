@@ -11,6 +11,7 @@ namespace ShineSpike.Services
         Task<Post> GetByPermalink(string permalink);
         IEnumerable<Post> GetPublishedPosts(Func<Post, bool> condition = null);
         IEnumerable<Post> GetPostsByCategory(string category);
+        IEnumerable<string> GetCategories();
         Task Publish(Post post);
         Task Delete(Post post);
     }

@@ -1,8 +1,9 @@
 $(function () {
     var editor = editormd("editormd", {
         width: "100%",
-        height: "70vh",
+        height: "65vh",
         path: '/lib/',
+        placeholder: "",
         toolbarIcons: function () {
             return [
                 "bold", "del", "italic", "quote", "|",
