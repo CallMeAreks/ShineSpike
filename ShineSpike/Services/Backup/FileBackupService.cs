@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using ShineSpike.Utils;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace ShineSpike.Services.Backup
 {
@@ -36,9 +38,28 @@ namespace ShineSpike.Services.Backup
 
         public bool RestoreData(string backupFileName)
         {
-            var backupPath = $"{BackupFolderPath}/{backupFileName}";
-            ZipFile.ExtractToDirectory(backupPath, BlogFilesPath, true);
-            return true;
+            try
+            {
+                var backupPath = $"{BackupFolderPath}/{backupFileName}.zip";
+                ZipFile.ExtractToDirectory(backupPath, BlogFilesPath, true);
+                return true;
+            }
+            catch(FileNotFoundException)
+            {
+                return false;
+            }
+        }
+
+        public FileInfo GetBackup(string backupFile)
+        {
+            var destination = $"{BackupFolderPath}/{$"{backupFile}.zip"}";
+            return new FileInfo(destination);
+        }
+
+        public IEnumerable<FileInfo> GetBackups()
+        {
+            var files = Directory.EnumerateFiles(BackupFolderPath, $"*zip", SearchOption.TopDirectoryOnly);
+            return files.Select(file => new FileInfo(file));
         }
     }
 }

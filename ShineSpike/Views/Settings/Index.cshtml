@@ -1,0 +1,64 @@
+﻿@model IEnumerable<System.IO.FileInfo>
+@{
+    ViewData["Title"] = "Settings";
+}
+@section Head
+{
+}
+
+<main role="main" class="container">
+    
+    <div class="row">
+        <div class="col-md-4">
+
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a asp-controller="Settings" asp-action="Category" class="nav-link active">Backups</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Backups</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     @foreach (var backup in Model)
+                     {
+                          <tr class="table-dark">
+                              <td>
+                                  <a asp-controller="Settings" asp-action="DownloadBackup" asp-route-backupFile="@backup.GetNameWithoutExtension()" style="font-size:0.85rem">
+                                      @backup.GetNameWithoutExtension()
+                                  </a>
+                              </td>
+                              <td>
+                                  <a asp-controller="Settings" asp-action="Restore" asp-route-backupFile="@backup.GetNameWithoutExtension()" class="btn btn-sm btn-primary">
+                                      Restore
+                                  </a>
+                              </td>
+                          </tr>
+                     }
+                    </tbody>
+                <tfoot>
+                    <tr class="table-dark">
+                        <td colspan="2">
+
+                            <a asp-controller="Settings" asp-action="CreateBackup" class="btn btn-sm btn-primary">
+                                Create backup
+                            </a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</main><!-- /.container -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+@{
+    await Html.RenderPartialAsync("../Shared/Footer.cshtml");
+}

@@ -16,6 +16,11 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top">
         <a class="navbar-brand" href="~/">@settings.Value.Name</a>
         <a class="nav-link" href="~/blog">Blog <span class="sr-only">(current)</span></a>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a class="nav-link" href="~/settings">Settings</a>
+        }
     </nav>
 
     @RenderBody()
