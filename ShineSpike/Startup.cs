@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using ShineSpike.Services;
+using ShineSpike.Services.Backup;
 using ShineSpike.Utils;
 using WebMarkupMin.AspNetCore3;
 using WebMarkupMin.Core;
@@ -27,6 +28,7 @@ namespace ShineSpike
             services.AddSingleton<IPostService, FilePostService>();
             services.AddSingleton<ILoginService, LoginService>();
             services.AddScoped<IFormFileUploadService, FormFileUploadService>();
+            services.AddScoped<IBackupService, ZipFileBackupService>();
             services.Configure<SiteSettings>(Configuration.GetSection("site"));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
