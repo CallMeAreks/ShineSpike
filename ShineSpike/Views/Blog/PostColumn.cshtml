@@ -18,11 +18,11 @@
         <div class="card-footer">
             @if (Model.Categories.Any())
             {
-                <span>Categories:</span>
+                <div>Categories:</div>
 
                 @foreach (string cat in Model.Categories)
                 {
-                    <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat.ToLowerInvariant()" asp-route-page="">@cat</a>
+                    <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat.ToLowerInvariant()" class="category-link">@cat</a>
                 }
             }
         </div>

@@ -20,7 +20,7 @@
     font-size: 69%;
 }
 
-.post .card-footer {
+.post .card-footer, .post-columns .card-footer {
     font-size: 75%;
 }
 
@@ -40,4 +40,12 @@
 
 .post-cover{
     margin-bottom: 1.5rem;
+}
+.card-body .post-body a, .category-link {
+    color: #1F9BCF
+}
+
+.card-footer .btn {
+    margin-top:1rem;
+    float:right
 }
