@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<System.IO.FileInfo>
 @{
-    ViewData["Title"] = "Settings";
+    ViewData["Title"] = "Panel";
 }
 @section Head
 {
@@ -10,12 +10,7 @@
 
     <div class="row">
         <div class="col-md-4">
-
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                    <a asp-controller="Settings" asp-action="Category" class="nav-link active">Backups</a>
-                </li>
-            </ul>
+            @{await Html.RenderPartialAsync("PanelSidebar.cshtml");}
         </div>
         <div class="col-md-8">
             <table class="table table-hover">
@@ -30,12 +25,12 @@
                     {
                         <tr class="table-dark">
                             <td>
-                                <a asp-controller="Settings" asp-action="DownloadBackup" asp-route-backupFile="@backup.GetNameWithoutExtension()" style="font-size:0.85rem">
+                                <a asp-controller="Panel" asp-action="DownloadBackup" asp-route-backupFile="@backup.GetNameWithoutExtension()" style="font-size:0.85rem">
                                     @backup.GetNameWithoutExtension()
                                 </a>
                             </td>
                             <td>
-                                <a asp-controller="Settings" asp-action="Restore" asp-route-backupFile="@backup.GetNameWithoutExtension()" class="btn btn-sm btn-primary">
+                                <a asp-controller="Panel" asp-action="Restore" asp-route-backupFile="@backup.GetNameWithoutExtension()" class="btn btn-sm btn-primary">
                                     Restore
                                 </a>
                             </td>
@@ -46,7 +41,7 @@
                     <tr class="table-dark">
                         <td colspan="2">
 
-                            <a asp-controller="Settings" asp-action="CreateBackup" class="btn btn-sm btn-primary">
+                            <a asp-controller="Panel" asp-action="CreateBackup" class="btn btn-sm btn-primary">
                                 Create backup
                             </a>
                         </td>

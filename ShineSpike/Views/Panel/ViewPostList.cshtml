@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Post>
+@{
+    ViewData["Title"] = "Panel";
+}
+@section Head
+{
+}
+
+<main role="main" class="container">
+
+    <div class="row">
+        <div class="col-md-4">
+            @{await Html.RenderPartialAsync("PanelSidebar.cshtml");}
+        </div>
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Post</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var post in Model)
+                    {
+                        <tr class="table-dark">
+                            <td>
+                                @post.Title
+                            </td>
+                            <td>
+                                <a asp-controller="Publisher" asp-action="Editor" asp-route-id="@post.Id" class="btn btn-sm btn-primary">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="table-dark">
+                        <td colspan="2">
+                            <a asp-controller="Publisher" asp-action="Editor" class="btn btn-sm btn-primary">
+                                New Post
+                            </a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</main><!-- /.container -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+@{await Html.RenderPartialAsync("../Shared/Footer.cshtml");}

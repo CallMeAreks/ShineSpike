@@ -1,0 +1,14 @@
+﻿@{
+    var action = ViewContext.RouteData.Values["Action"].ToString();
+}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a asp-controller="Panel" asp-action="ViewPostList" class="nav-link @(action == "ViewPostList" ? "active" : "")">Posts</a>
+    </li>
+    <li class="nav-item">
+        <a asp-controller="Panel" asp-action="ViewPageList" class="nav-link @(action == "ViewPageList" ? "active" : "")">Pages</a>
+    </li>
+    <li class="nav-item">
+        <a asp-controller="Panel" asp-action="Backups" class="nav-link @(action == "ViewBackups" ? "active" : "")">Backups</a>
+    </li>
+</ul>
