@@ -5,6 +5,6 @@ namespace ShineSpike.Services
 {
     public interface IFormFileUploadService
     {
-        public FormUploadResponse UploadFormFile(IFormFile file);
+        public FormUploadResponse UploadFormFile(IFormFile file, string destinationFolder);
     }
 }

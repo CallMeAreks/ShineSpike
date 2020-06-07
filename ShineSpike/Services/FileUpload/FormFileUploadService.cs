@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using ShineSpike.Models;
-using ShineSpike.Utils;
 using System;
 using System.IO;
 using System.Net.Http.Headers;
@@ -22,18 +21,21 @@ namespace ShineSpike.Services
             WebRootPath = env.WebRootPath;
         }
 
-        public FormUploadResponse UploadFormFile(IFormFile file)
+        public FormUploadResponse UploadFormFile(IFormFile file, string destinationFolder)
         {
             try
             {
                 //Getting FileName
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
 
-                // Assigning Unique Filename
-                var uniqueFileName = $"{DateTime.UtcNow:yyyyMMddHmmss}-{fileName}";
+                if(File.Exists(Path.Combine(WebRootPath, destinationFolder, fileName)))
+                {
+                    // Assigning Unique Filename
+                    fileName = $"{DateTime.UtcNow:yyyyMMddHmmss}-{fileName}";
+                }
 
                 // Get the final path
-                var filePath = Path.Combine(WebRootPath, Constants.ImagesFolderPath, uniqueFileName);
+                var filePath = Path.Combine(WebRootPath, destinationFolder, fileName);
 
                 using (FileStream fs = File.Create(filePath))
                 {
@@ -41,7 +43,7 @@ namespace ShineSpike.Services
                     fs.Flush();
                 }
 
-                return new FormUploadResponse($"/{Constants.ImagesFolderPath}/{uniqueFileName}");
+                return new FormUploadResponse($"/{destinationFolder}/{fileName}");
             }
             catch
             {

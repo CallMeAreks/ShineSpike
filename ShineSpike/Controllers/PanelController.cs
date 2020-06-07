@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShineSpike.Extensions;
 using ShineSpike.Services;
 using ShineSpike.Services.Backup;
 using ShineSpike.Utils;
@@ -14,11 +15,13 @@ namespace ShineSpike.Controllers
     {
         private readonly IPostService PostService;
         private readonly IBackupService BackupService;
+        private readonly IFormFileUploadService UploadService;
 
-        public PanelController(IPostService postService, IBackupService backupService)
+        public PanelController(IPostService postService, IBackupService backupService, IFormFileUploadService uploadService)
         {
             PostService = postService;
             BackupService = backupService;
+            UploadService = uploadService;
         }
 
         public IActionResult Index()
@@ -66,6 +69,21 @@ namespace ShineSpike.Controllers
             {
                 return NotFound();
             }
+        }
+
+        [Route("backups/upload")]
+        public IActionResult UploadBackupForm()
+        {
+            return View();
+        }
+
+        [Route("backups/upload")]
+        [HttpPost]
+        public IActionResult UploadBackup()
+        {
+            var backup = Request.Form.Files.FirstOrDefault(file => file.IsValidZipFile());
+            UploadService.UploadFormFile(backup, Constants.BackupFolderPath);
+            return RedirectToAction(nameof(ViewBackups));
         }
 
         [Route("backups/{backupFile}/restore")]

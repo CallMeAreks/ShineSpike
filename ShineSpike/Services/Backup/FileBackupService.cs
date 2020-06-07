@@ -59,7 +59,7 @@ namespace ShineSpike.Services.Backup
         public IEnumerable<FileInfo> GetBackups()
         {
             var files = Directory.EnumerateFiles(BackupFolderPath, $"*zip", SearchOption.TopDirectoryOnly);
-            return files.Select(file => new FileInfo(file));
+            return files.Select(file => new FileInfo(file)).OrderByDescending(file => file.Name);
         }
     }
 }
