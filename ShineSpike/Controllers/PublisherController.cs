@@ -67,7 +67,7 @@ namespace ShineSpike.Controllers
 
         private EditPostViewModel GetEditPostViewModel(IEnumerable<string> categories, Post post = null)
         {
-            var model =new EditPostViewModel
+            var model = new EditPostViewModel
             {
                 AllCategories = categories
             };

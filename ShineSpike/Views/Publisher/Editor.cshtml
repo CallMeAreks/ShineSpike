@@ -58,6 +58,11 @@
                         </div>
 
                         <div class="form-group row">
+                            <label asp-for="@Model.Post.Type" class="label">Type</label>
+                            <select asp-for="@Model.Post.Type" asp-items="@Html.GetEnumSelectList<PostType>()" class="form-control-plaintext"></select>
+                        </div>
+
+                        <div class="form-group row">
                             <label class="label">Categories</label>
                             <input id="tags" name="Categories" class="form-control-plaintext" placeholder="Categories separated by a comma" value="@Model.Post.SerializedCategories" />
                         </div>

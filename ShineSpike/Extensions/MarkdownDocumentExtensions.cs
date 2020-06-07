@@ -39,6 +39,9 @@ namespace ShineSpike.Extensions
             var firstTextParagraph = paragraphs.SelectMany(p => p.Inline.Descendants<LiteralInline>()).FirstOrDefault();
             var text = firstTextParagraph.Content.Text;
 
+            if (firstTextParagraph == null)
+                return string.Empty;
+
             // Truncate if needed
             if (text.Length > Constants.ExcerptLength)
             {

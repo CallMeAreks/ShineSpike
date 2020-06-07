@@ -21,6 +21,7 @@ namespace ShineSpike.Models
         public string Content { get; set; } = string.Empty;
 
         public string Cover { get; set; }
+        public PostType Type { get; set; } = PostType.Post;
 
         public string Excerpt { get; set; }
         public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
@@ -58,5 +59,11 @@ namespace ShineSpike.Models
             Excerpt = Excerpt ?? doc.ExtractExcerpt();
             HtmlContent = doc.ToHtml(pipeline);
         }
+    }
+
+    public enum PostType
+    {
+        Post,
+        Page
     }
 }

@@ -54,12 +54,14 @@ namespace ShineSpike.Services
 
         public IEnumerable<Post> GetPublishedPosts(Func<Post, bool> condition = null)
         {
+            var posts = Cache.Posts.Where(post => post.Type == PostType.Post && IsPublished(post));
+            
             if (condition == null)
             {
-                return Cache.Posts.Where(IsPublished);
+                return posts;
             }
 
-            return Cache.Posts.Where(post => IsPublished(post) && condition(post));
+            return posts.Where(post => condition(post));
         }
 
         public IEnumerable<Post> GetPostsByCategory(string category)
